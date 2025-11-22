@@ -9,6 +9,25 @@ template $MessageView: Box {
   margin-end: 6;
   spacing: 9;
 
+  ShortcutController {
+    scope: managed;
+
+    Shortcut {
+      trigger: "Delete|KP_Delete";
+      action: "action(message.trash)";
+    }
+
+    Shortcut {
+      trigger: "Delete|KP_Delete";
+      action: "action(message.restore)";
+    }
+
+    Shortcut {
+      trigger: "Delete|KP_Delete";
+      action: "action(message.discard)";
+    }
+  }
+
   Box {
     valign: start;
     spacing: 6;
@@ -91,84 +110,46 @@ template $MessageView: Box {
       }
     }
 
-    Box {
+    $Toolbar {
       hexpand: true;
       halign: end;
       valign: start;
 
-      Button read_button {
-        visible: bind read_button.sensitive;
-        icon-name: "mail-read-symbolic";
-        tooltip-text: _("Read");
+      $ToolbarItem {
         action-name: "message.read";
+        label: _("Read");
+        icon-name: "mail-read-symbolic";
       }
 
-      Button unread_button {
-        visible: bind unread_button.sensitive;
-        icon-name: "mail-unread-symbolic";
-        tooltip-text: _("Unread");
+      $ToolbarItem {
         action-name: "message.unread";
+        label: _("Unread");
+        icon-name: "mail-unread-symbolic";
       }
 
-      Button reply_button {
-        visible: bind reply_button.sensitive;
-        icon-name: "mail-reply-sender-symbolic";
-        tooltip-text: _("Reply");
+      $ToolbarItem {
         action-name: "message-view.reply";
+        label: _("Reply");
+        icon-name: "mail-reply-sender-symbolic";
       }
 
-      Button trash_button {
-        visible: bind trash_button.sensitive;
-        icon-name: "trash-symbolic";
-        tooltip-text: _("Trash");
+      $ToolbarItem {
         action-name: "message.trash";
-
-        ShortcutController {
-          scope: managed;
-
-          Shortcut {
-            trigger: "Delete|KP_Delete";
-            action: "activate";
-          }
-        }
-      }
-
-      Button restore_button {
-        visible: bind restore_button.sensitive;
-        icon-name: "restore-symbolic";
-        tooltip-text: _("Restore");
-        action-name: "message.restore";
-
-        ShortcutController {
-          scope: managed;
-
-          Shortcut {
-            trigger: "Delete|KP_Delete";
-            action: "activate";
-          }
-        }
-      }
-
-      Button discard_button {
-        visible: bind discard_button.sensitive;
+        label: _("Trash");
         icon-name: "trash-symbolic";
-        tooltip-text: _("Discard");
-        action-name: "message.discard";
-
-        ShortcutController {
-          scope: managed;
-
-          Shortcut {
-            trigger: "Delete|KP_Delete";
-            action: "activate";
-          }
-        }
       }
 
-      styles [
-        "toolbar",
-        "card",
-      ]
+      $ToolbarItem {
+        action-name: "message.restore";
+        label: _("Restore");
+        icon-name: "restore-symbolic";
+      }
+
+      $ToolbarItem {
+        action-name: "message.discard";
+        label: _("Discard");
+        icon-name: "trash-symbolic";
+      }
     }
   }
 

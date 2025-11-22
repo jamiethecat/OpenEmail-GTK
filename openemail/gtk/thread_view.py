@@ -20,6 +20,41 @@ for t in Attachments, Body:
     GObject.type_ensure(t)
 
 
+class ToolbarItem(GObject.Object):
+    """An item for in a toolbar."""
+
+    __gtype_name__ = __qualname__
+
+    action_name = GObject.Property(type=str)
+    label = GObject.Property(type=str)
+    icon_name = GObject.Property(type=str)
+
+
+class Toolbar(Gtk.Box, Gtk.Buildable):
+    """A container for actions."""
+
+    __gtype_name__ = __qualname__
+
+    def __init__(self, **kwargs: Any):
+        super().__init__(**kwargs)
+
+        self.add_css_class("toolbar")
+        self.add_css_class("card")
+
+    def do_add_child(self, _builder, child: GObject.Object, _type):
+        """Add a child to `self`."""
+        if not isinstance(child, ToolbarItem):
+            raise TypeError
+
+        button = Gtk.Button(
+            action_name=child.action_name,
+            tooltip_text=child.label,
+            icon_name=child.icon_name,
+        )
+        Property.bind(button, "sensitive", button, "visible")
+        self.append(button)
+
+
 @Gtk.Template.from_resource(f"{PREFIX}/message-view.ui")
 class MessageView(Gtk.Box):
     """A view displaying metadata about, and the contents of a message."""
